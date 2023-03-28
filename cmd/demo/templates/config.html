@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
+    <title>Demo Config Service</title>
+</head>
+<body class="pa5">
+
+<a href="/config">Back</a>
+
+<h1>{{ .Key }}</h1>
+
+<hr>
+
+{{ .CurrentHTML }}
+
+<hr>
+
+{{ range $i, $n := .Notes }}
+<details class="pt3">
+    <summary>{{ $i }}: {{ $n.Title }}</summary>
+    <div>
+{{ $n.HTML }}
+    </div>
+</details>
+{{ end }}
+
+
+<details class="pt3">
+    <summary> Edit </summary>
+    <div>
+        <form method="POST" action="/config/{{ .Key }}">
+            <textarea name="value" rows="25" class="w-100">{{ .Current }}</textarea>
+            <input type="submit" value="Update">
+        </form>
+    </div>
+</details>
+
+</body>
+
+</html>

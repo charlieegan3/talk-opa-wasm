@@ -1,0 +1,27 @@
+input[type=checkbox] {
+    display: none;
+}
+.seat-label {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.seat-label-left {
+    background: url("/static/icons/seat_l.png") no-repeat;
+    background-size: contain;
+}
+.seat-label-right {
+    background: url("/static/icons/seat_r.png") no-repeat;
+    background-size: contain;
+}
+
+input[type=checkbox]:checked + .seat-label.seat-label-left {
+    background: url("/static/icons/seat_l_selected.png") no-repeat left center;
+    background-size: contain;
+}
+
+input[type=checkbox]:checked + .seat-label.seat-label-right {
+    background: url("/static/icons/seat_r_selected.png") no-repeat left center;
+    background-size: contain;
+}

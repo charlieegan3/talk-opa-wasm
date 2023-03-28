@@ -1,0 +1,20 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
+    <title>Demo Config Service</title>
+</head>
+<body class="pa5">
+
+<h1>Demo Configurator</h1>
+
+<ul>
+{{ range $p, $_ := .Policies }}
+    <li>
+        <a href="/config/{{ $p }}">{{ $p }}</a>
+    </li>
+{{ end }}
+</ul>
+
+</body>
+
+</html>
