@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+
+    <title>Example Server</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        td {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body class="pa3">
+
+<p>
+    <a href="/">Reload Bookings</a>
+</p>
+<p>
+    <a href="/reload">Reload Policy</a>
+    {% if policy_loaded_at %}
+        {{ policy_loaded_at }}
+    {% endif %}
+</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Passenger Count</th>
+        <th>Departure Station</th>
+        <th>Destination Station</th>
+        <th>Seats</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    {% for booking in bookings %}
+    <tr>
+        <td>{{ booking.name }}</td>
+        <td>{{ booking.email }}</td>
+        <td>{{ booking.passenger_count }}</td>
+        <td>{{ booking.departure_station }}</td>
+        <td>{{ booking.destination_station }}</td>
+        <td>{{ ', '.join(booking.seats) }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+</body>
+</html>

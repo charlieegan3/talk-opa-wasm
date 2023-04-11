@@ -74,12 +74,15 @@ func main() {
 		}
 	}))
 
-	addr := "localhost:8081"
+	addr := "localhost:8082"
 	server := &http.Server{
 		Handler: handlers.LoggingHandler(os.Stdout, r),
 		Addr:    addr,
 	}
 
 	fmt.Println("Listening on", addr)
-	server.ListenAndServe()
+	err := server.ListenAndServe()
+	if err != nil {
+		panic(err)
+	}
 }

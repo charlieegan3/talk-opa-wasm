@@ -35,8 +35,6 @@ function validateForm(e) {
         seats: formData.getAll('seat'),
     }
 
-    console.log(inputData.seats);
-
     opa.loadPolicy(policyBytes).then(policy => {
         const resultSet = policy.evaluate(inputData);
         if (resultSet == null) {
@@ -52,6 +50,25 @@ function validateForm(e) {
 
         if (result.length === 0) {
             setResult('OK');
+
+            // make a post request
+            fetch('http://localhost:8081/book', {
+                method: 'POST',
+                body: JSON.stringify(inputData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.status === 200) {
+                    setResult('OK');
+                } else {
+                    setResult('ERROR');
+                }
+            }).catch(error => {
+                console.error(error);
+                setResult('ERROR');
+            })
+
             return
         }
 

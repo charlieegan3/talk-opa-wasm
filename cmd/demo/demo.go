@@ -59,19 +59,30 @@ deny[reason] {
 	}
 }
 
+`,
+}
+
+var policyNotes = map[string][]policyNote{
+	"application/form": {
+		{
+			Title: "Validate TODO",
+			Body: `
+package application.form
+
 # validate name
 deny[reason] {
 	input.name == ""
 	reason := {
 		"field": "name",	
-		"message": "Name is required.",	
+		"message": "Name is required",	
 	}
 }
+
 deny[reason] {
 	regex.match("[0-9]+", input.name)
 	reason := {
 		"field": "name",	
-		"message": "Name cannot contain numbers.",	
+		"message": "No numbers in your name please",	
 	}
 }
 
@@ -166,31 +177,6 @@ deny[reason] {
 	}
 }
 `,
-}
-
-var policyNotes = map[string][]policyNote{
-	"application/form": {
-		{
-			Title: "Validate Name",
-			Body: `
-package application.form
-
-deny[reason] {
-	input.name == ""
-	reason := {
-		"field": "name",	
-		"message": "Name is required",	
-	}
-}
-
-deny[reason] {
-	regex.match("[0-9]+", input.name)
-	reason := {
-		"field": "name",	
-		"message": "No numbers in your name please",	
-	}
-}
-`,
 		},
 	},
 }
@@ -208,13 +194,16 @@ func main() {
 	}
 
 	fmt.Println("Listening on", addr)
-	server.ListenAndServe()
+	err := server.ListenAndServe()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func bundleHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:8081")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET")
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Content-Type", "application/wasm")
