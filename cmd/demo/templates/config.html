@@ -10,6 +10,16 @@
 <h1>{{ .Key }}</h1>
 
 <hr>
+<details class="pt3">
+    <summary> Edit </summary>
+    <div>
+        <form method="POST" action="/config/{{ .Key }}">
+            <textarea name="value" rows="25" class="w-100">{{ .Current }}</textarea>
+            <input type="submit" value="Update">
+        </form>
+    </div>
+</details>
+<hr>
 
 {{ .CurrentHTML }}
 
@@ -25,15 +35,6 @@
 {{ end }}
 
 
-<details class="pt3">
-    <summary> Edit </summary>
-    <div>
-        <form method="POST" action="/config/{{ .Key }}">
-            <textarea name="value" rows="25" class="w-100">{{ .Current }}</textarea>
-            <input type="submit" value="Update">
-        </form>
-    </div>
-</details>
 
 </body>
 

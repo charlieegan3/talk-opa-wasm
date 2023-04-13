@@ -15,7 +15,6 @@
         } from '/static/scripts/script.js';
 
         ready(() => {
-            reloadPolicy();
             document.getElementById("reload-button").addEventListener("click", reloadPolicy);
             document.getElementById("ticket-form").addEventListener("submit", validateForm);
         });
@@ -149,6 +148,7 @@
 
 <div class="mt3">
     <button id="reload-button">Reload Policy</button>
+    <span id="policy-loaded-at"></span>
 </div>
 
 

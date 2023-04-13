@@ -62,13 +62,12 @@ deny[reason] {
 `,
 }
 
+// https://play.openpolicyagent.org/p/DmpSU2s3VO
 var policyNotes = map[string][]policyNote{
 	"application/form": {
 		{
-			Title: "Validate TODO",
+			Title: "Validate Name",
 			Body: `
-package application.form
-
 # validate name
 deny[reason] {
 	input.name == ""
@@ -85,7 +84,11 @@ deny[reason] {
 		"message": "No numbers in your name please",	
 	}
 }
-
+`,
+		},
+		{
+			Title: "Validate Email",
+			Body: ` 
 # validate email
 email_pattern := ` + "`" + `^\S+@\S+\.\S+$` + "`" + `
 deny[reason] {
@@ -102,6 +105,11 @@ deny[reason] {
 		"message": "Email must not contain @example.com.",
 	}
 }
+`,
+		},
+		{
+			Title: "Validate Passenger Count",
+			Body: ` 
 
 # validate passenger_count
 deny[reason] {
@@ -111,6 +119,11 @@ deny[reason] {
 		"message": "Must have at least one passenger.",
 	}
 }
+`,
+		},
+		{
+			Title: "Validate Route",
+			Body: ` 
 
 # validate route
 deny[reason] {
@@ -133,6 +146,11 @@ deny[reason] {
 		"message": sprintf("Route must be within the same area. %s and %s are in different areas.", [input.departure_station, input.destination_station]),
 	}
 }
+`,
+		},
+		{
+			Title: "Validate Seat Selection",
+			Body: ` 
 
 # validate seat
 deny[reason] {
@@ -162,13 +180,16 @@ seat_adjacencies := {
 deny[reason] {
 	count(input.seats) > 1
 
+	# parsed JSON is an array rather than a set
 	seats_set := {s | s := input.seats[_]}
 
 	some i
 	seat := seats_set[i]
 
+	# validate that one of the other selected seats is adjacent
+	# find the set of reachable seats from the current seat
 	reachable := graph.reachable(seat_adjacencies, {seat}) - {seat}
-
+	# check that the set of reachable seats is a subset of the set of selected seats
 	reachable & seats_set == set()
 
 	reason := {

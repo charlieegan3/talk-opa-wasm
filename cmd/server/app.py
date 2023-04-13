@@ -21,10 +21,12 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
+    reversed_bookings = bookings
+    reversed_bookings.reverse()
     return render_template(
         'index.html',
         policy_loaded_at=policy_loaded_at,
-        bookings=bookings,
+        bookings=reversed_bookings,
     )
 
 
@@ -53,6 +55,7 @@ def book():
         if len(result) > 0:
             resp.headers['Content-Type'] = 'application/json'
             resp.data = json.dumps(result)
+            resp.status_code = 400
             return resp
 
     bookings.append(booking)
@@ -67,8 +70,6 @@ def reload():
         response = requests.get(
             url="http://localhost:8080/bundles/application/form.wasm",
         )
-
-        print(response.status_code)
 
         f = open(POLICY_LOCATION, "wb")
         f.write(response.content)
