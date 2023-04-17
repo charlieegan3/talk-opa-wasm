@@ -51,41 +51,12 @@ package application.form
 
 import future.keywords.in
 
-deny[reason] {
-	false
-	reason := {
-		"field": "TODO",
-		"message": "TODO",
-	}
-}
-
 `,
 }
 
 // https://play.openpolicyagent.org/p/DmpSU2s3VO
 var policyNotes = map[string][]policyNote{
 	"application/form": {
-		{
-			Title: "Validate Name",
-			Body: `
-# validate name
-deny[reason] {
-	input.name == ""
-	reason := {
-		"field": "name",	
-		"message": "Name is required",	
-	}
-}
-
-deny[reason] {
-	regex.match("[0-9]+", input.name)
-	reason := {
-		"field": "name",	
-		"message": "No numbers in your name please",	
-	}
-}
-`,
-		},
 		{
 			Title: "Validate Email",
 			Body: ` 
@@ -99,24 +70,10 @@ deny[reason] {
 	}
 }
 deny[reason] {
-	contains(input.email, "@example.com")
+	endswith(input.email, "@example.com")
 	reason := {
 		"field": "email",	
-		"message": "Email must not contain @example.com.",
-	}
-}
-`,
-		},
-		{
-			Title: "Validate Passenger Count",
-			Body: ` 
-
-# validate passenger_count
-deny[reason] {
-	input.passenger_count < 1
-	reason := {
-		"field": "passenger_count",
-		"message": "Must have at least one passenger.",
+		"message": "@example.com emails not permitted.",
 	}
 }
 `,
@@ -127,7 +84,14 @@ deny[reason] {
 
 # validate route
 deny[reason] {
-	{ input.departure_station, input.destination_station } & { "none" } != set()
+	input.departure_station == input.destination_station 
+	reason := {
+		"field": "route",
+		"message": "Departure and destination stations must be different."
+	}
+}
+deny[reason] {
+	"none" in { input.departure_station, input.destination_station } 
 	reason := {
 		"field": "route",
 		"message": "Departure and destination stations must be set."
@@ -144,6 +108,20 @@ deny[reason] {
 	reason := {
 		"field": "route",
 		"message": sprintf("Route must be within the same area. %s and %s are in different areas.", [input.departure_station, input.destination_station]),
+	}
+}
+`,
+		},
+		{
+			Title: "Validate Passenger Count",
+			Body: ` 
+
+# validate passenger_count
+deny[reason] {
+	input.passenger_count < 1
+	reason := {
+		"field": "passenger_count",
+		"message": "Must have at least one passenger.",
 	}
 }
 `,

@@ -24,21 +24,9 @@
 
 <form id="ticket-form">
     <div class="mb2">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name">
-        <p class="mt0 red f6 error-message error-message-name"></p>
-    </div>
-
-    <div class="mb2">
         <label for="email">Email:</label><br>
         <input type="text" id="email" name="email">
         <p class="mt0 red f6 error-message error-message-email"></p>
-    </div>
-
-    <div class="mb2">
-        <label for="passenger_count">Passengers:</label><br>
-        <input type="number" id="passenger_count" name="passenger_count" value="0"><br>
-        <p class="mt0 red f6 error-message error-message-passenger_count"></p>
     </div>
 
     <div class="mb2">
@@ -65,6 +53,12 @@
     <p class="mt0 red f6 error-message error-message-route"></p>
 
     <div class="mb2">
+        <label for="passenger_count">Passengers:</label><br>
+        <input type="number" id="passenger_count" name="passenger_count" value="0"><br>
+        <p class="mt0 red f6 error-message error-message-passenger_count"></p>
+    </div>
+
+    <div class="mb2">
         <p class="mb0">Seat:</p>
         <div class="ba w5">
             <div class="flex w5">
@@ -75,7 +69,7 @@
                             <label class="seat-label seat-label-left" for="seat1"></label>
                         </div>
                         <div class="ph2">
-                            <input type="checkbox" id="seat2" name="seat" value="seat1">
+                            <input type="checkbox" id="seat2" name="seat" value="seat2">
                             <label class="seat-label seat-label-left" for="seat2"></label>
                         </div>
                     </div>

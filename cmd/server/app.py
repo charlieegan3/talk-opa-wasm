@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
-    reversed_bookings = bookings
+    reversed_bookings = bookings.copy()
     reversed_bookings.reverse()
     return render_template(
         'index.html',
