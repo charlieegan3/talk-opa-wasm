@@ -80,7 +80,7 @@ func main() {
 		Addr:    addr,
 	}
 
-	fmt.Println("Listening on", addr)
+	fmt.Println("Listening on", fmt.Sprintf("http://%s", addr))
 	err := server.ListenAndServe()
 	if err != nil {
 		panic(err)

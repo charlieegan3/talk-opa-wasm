@@ -58,9 +58,23 @@ import future.keywords.in
 var policyNotes = map[string][]policyNote{
 	"application/form": {
 		{
+			Title: "Validate Passenger Count",
+			Body: ` 
+
+# validate that the booking is for at least one passenger
+deny[reason] {
+	input.passenger_count < 1
+	reason := {
+		"field": "passenger_count",
+		"message": "Must have at least one passenger.",
+	}
+}
+`,
+		},
+		{
 			Title: "Validate Email",
 			Body: ` 
-# validate email
+# validate email matches pattern
 email_pattern := ` + "`" + `^\S+@\S+\.\S+$` + "`" + `
 deny[reason] {
 	not regex.match(email_pattern, input.email)
@@ -69,6 +83,8 @@ deny[reason] {
 		"message": sprintf("Email must match pattern %v.", [email_pattern]),
 	}
 }
+
+# validate email is not from a domain we don't allow
 deny[reason] {
 	endswith(input.email, "@example.com")
 	reason := {
@@ -82,7 +98,7 @@ deny[reason] {
 			Title: "Validate Route",
 			Body: ` 
 
-# validate route
+# validate route starts and finishes in different stations
 deny[reason] {
 	input.departure_station == input.destination_station 
 	reason := {
@@ -90,6 +106,8 @@ deny[reason] {
 		"message": "Departure and destination stations must be different."
 	}
 }
+
+# validate both the departure and destination stations are set in the form
 deny[reason] {
 	"none" in { input.departure_station, input.destination_station } 
 	reason := {
@@ -97,6 +115,8 @@ deny[reason] {
 		"message": "Departure and destination stations must be set."
 	}
 }
+
+# validate that the departure and destination stations are in the same area
 station_areas := {
 	"amsterdam": "europe",
 	"paris": "europe",
@@ -113,24 +133,10 @@ deny[reason] {
 `,
 		},
 		{
-			Title: "Validate Passenger Count",
-			Body: ` 
-
-# validate passenger_count
-deny[reason] {
-	input.passenger_count < 1
-	reason := {
-		"field": "passenger_count",
-		"message": "Must have at least one passenger.",
-	}
-}
-`,
-		},
-		{
 			Title: "Validate Seat Selection",
 			Body: ` 
 
-# validate seat
+# validate the number of seats selected matches the passenger count
 deny[reason] {
 	count(input.seats) != input.passenger_count
 	reason := {
@@ -138,6 +144,8 @@ deny[reason] {
 		"message": sprintf("Selected number of seats %d does not match passenger count %d.", [count(input.seats), input.passenger_count]),
 	}
 }
+
+# validate that the selected seats are adjacent
 seat_adjacencies := {
 	"seat1": ["seat2", "seat3", "seat4"],
 	"seat2": ["seat1", "seat3", "seat4"],
@@ -192,7 +200,7 @@ func main() {
 		Addr:    addr,
 	}
 
-	fmt.Println("Listening on", addr)
+	fmt.Println("Demo running at: ", fmt.Sprintf("http://%s/config", addr))
 	err := server.ListenAndServe()
 	if err != nil {
 		panic(err)

@@ -22,7 +22,15 @@
 </head>
 <body class="pa3">
 
+<h1>Booking Client</h1>
+
 <form id="ticket-form">
+    <div class="mb2">
+        <label for="passenger_count">Passengers:</label><br>
+        <input type="number" id="passenger_count" name="passenger_count" value="0"><br>
+        <p class="mt0 red f6 error-message error-message-passenger_count"></p>
+    </div>
+
     <div class="mb2">
         <label for="email">Email:</label><br>
         <input type="text" id="email" name="email">
@@ -51,12 +59,6 @@
         </select>
     </div>
     <p class="mt0 red f6 error-message error-message-route"></p>
-
-    <div class="mb2">
-        <label for="passenger_count">Passengers:</label><br>
-        <input type="number" id="passenger_count" name="passenger_count" value="0"><br>
-        <p class="mt0 red f6 error-message error-message-passenger_count"></p>
-    </div>
 
     <div class="mb2">
         <p class="mb0">Seat:</p>
