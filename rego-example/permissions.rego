@@ -2,6 +2,8 @@ package permissions
 
 import future.keywords.in
 
+things = 1
+
 org_chart := {
 	"boss": {},
 	"human_resources": {
@@ -20,9 +22,9 @@ org_chart := {
 
 org_chart_graph[business_unit] := edges {
 	some business_unit, _ in org_chart
-	edges := {neighbour |
-		some neighbour
-		org_chart[neighbour].managed_by == business_unit
+	edges := {neighbour_ref |
+		some neighbour_ref, neighbour in org_chart
+		neighbour.managed_by == business_unit
 	}
 }
 
@@ -32,8 +34,7 @@ org_chart_permissions[business_unit] := access {
 
 	access := {item |
 		some bu, _ in reachable
-		some resource
-		item := org_chart[bu].access[resource]
+		some resource, item in org_chart[bu].access
 	}
 }
 
